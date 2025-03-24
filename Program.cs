@@ -6,6 +6,7 @@ namespace L20250324_Thread
     class Program
     {
         static Object _lock = new Object(); //동기화 객체
+        static Object _lock2 = new Object(); //동기화 객체
 
         //atomic, 공유영역 작업은 원자성, 중간 끊지 말라고
         //나 끝날때까지 다 하지마
@@ -13,24 +14,28 @@ namespace L20250324_Thread
 
         static void Add()
         {
-            for (int i = 0; i < 100000000; ++i)
+            for (int i = 0; i < 1000000; ++i)
             {
                 lock (_lock)
                 {
-                    Money++;
-
+                    lock (_lock2)
+                    {
+                        Money++;
+                    }
                 }
             }
-
         }
 
         static void Remove()
         {
-            for (int i = 0; i < 100000000; ++i)
+            for (int i = 0; i < 1000000; ++i)
             {
-                lock (_lock)
+                lock (_lock2)
                 {
-                    Money--;
+                    lock (_lock)
+                    {
+                        Money--;
+                    }
                 }
             }
         }
